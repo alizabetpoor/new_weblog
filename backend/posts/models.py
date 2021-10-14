@@ -3,6 +3,12 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+#category for posts
+class Category(models.Model):
+    name=models.CharField(max_length=70)
+    parent=models.ForeignKey("self",on_delete=models.CASCADE,null=True,blank=True)
+
+
 #model post
 class Post(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE,related_name="posts")
@@ -13,7 +19,10 @@ class Post(models.Model):
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now=True)
     likes=models.ManyToManyField(User,blank=True)
-
+    cateogry=models.ForeignKey(Category,on_delete=models.DO_NOTHING,null=True,blank=True)
+    class Meta:
+        verbose_name="پست"
+        verbose_name_plural="پست ها"
 
     def __str__(self) -> str:
         return f"عنوان مطلب:{self.title}"
@@ -32,6 +41,11 @@ class Comment(models.Model):
     text=models.TextField(verbose_name="متن کامنت")
     likes=models.ManyToManyField(User,blank=True)
     parent_comment=models.ForeignKey("self",blank=True,null=True,on_delete=models.CASCADE,related_name="replies")
+
+    class Meta:
+        verbose_name="کامنت"
+        verbose_name_plural="کامنت ها"
+
 
     def count_replies(self):
         return self.replies.count() 
