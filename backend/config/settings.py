@@ -40,15 +40,19 @@ INSTALLED_APPS = [
 
 
     #3rd party
+    'rest_framework',
+    "corsheaders",
 
     #local
     'posts.apps.PostsConfig',
     'profiles.apps.ProfilesConfig',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -146,3 +150,17 @@ USE_L10N = True
 USE_TZ = True
 
 
+#rest framework setting
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ]
+}
+
+
+#cors setting 
+CORS_ALLOWED_ORIGINS = [
+
+    'http://127.0.0.1:3000',
+    'http://localhost:3000',
+]
