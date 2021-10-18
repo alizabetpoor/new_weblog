@@ -180,3 +180,4 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/django,virtualenv,react
 
 blog_images/
+backend/config/__pycache__/settings.cpython-39.pyc
