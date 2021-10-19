@@ -3,7 +3,7 @@ from .models import Category, Post,Comment
 # Register your models here.
 
 class Post_Admin(admin.ModelAdmin):
-    list_display=("author","title","created","count_like")
+    list_display=("author","title","created","display_categorys","count_like")
     prepopulated_fields={"slug":("title",)}
 class Comment_Admin(admin.ModelAdmin):
     list_display=("author","post","count_like","count_replies")
