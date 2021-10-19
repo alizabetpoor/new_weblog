@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     "corsheaders",
+    'drf_yasg',
 
     #local
     'posts.apps.PostsConfig',
