@@ -8,6 +8,22 @@ from .views import (Posts_List,
     Post_by_category,
     MyTokenObtainPairView
 )
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import permissions
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Snippets API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
+)
 
 
 urlpatterns = [
@@ -19,6 +35,9 @@ urlpatterns = [
     path("comments/",Comment_List.as_view()),
     path('auth/', include('djoser.urls')),
     re_path(r"^auth/jwt/create/?", MyTokenObtainPairView.as_view(), name="jwt-create"),
-    re_path(r"^auth/jw/refresh/?", views.TokenRefreshView.as_view(), name="jwt-refresh"),
+    re_path(r"^auth/jwt/refresh/?", views.TokenRefreshView.as_view(), name="jwt-refresh"),
     re_path(r"^auth/jwt/verify/?", views.TokenVerifyView.as_view(), name="jwt-verify"),
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
