@@ -17,7 +17,7 @@ class User(AbstractUser):
         return f"{self.username}"
 
 class Profile(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name="profile")
+    user=models.OneToOneField(User,on_delete=models.CASCADE,related_name="profile")
     display_name=models.CharField(max_length=100,null=True,blank=True)
     birthday=models.DateField(null=True,blank=True)
     phonenumber=models.CharField(max_length=13,unique=True,null=True,blank=True,validators=[validate_phonenumber])
