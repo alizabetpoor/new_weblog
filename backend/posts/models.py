@@ -9,6 +9,11 @@ class Category(models.Model):
     parent=models.ForeignKey("self",on_delete=models.CASCADE,null=True,blank=True)
 
 
+    def __str__(self) -> str:
+        return self.name
+class PostManager(models.Manager):
+    def created(self):
+        return self.order_by("-created")
 #model post
 class Post(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE,related_name="posts")
@@ -19,7 +24,7 @@ class Post(models.Model):
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now=True)
     likes=models.ManyToManyField(User,blank=True)
-    cateogry=models.ForeignKey(Category,on_delete=models.DO_NOTHING,null=True,blank=True)
+    category=models.ManyToManyField(Category,blank=True)
     class Meta:
         verbose_name="پست"
         verbose_name_plural="پست ها"
@@ -27,13 +32,15 @@ class Post(models.Model):
     def __str__(self) -> str:
         return f"عنوان مطلب:{self.title}"
 
-
+    def display_categorys(self):
+        return ",".join([category.name for category in self.category.all()])
+    display_categorys.short_description="دسته بندی"
     def count_like(self):
         return self.likes.count()
 
     count_like.short_description="تعداد لایک"
 
-
+    objects=PostManager()
 
 class Comment(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE,related_name="comments")
