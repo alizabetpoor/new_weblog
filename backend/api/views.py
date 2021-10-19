@@ -12,7 +12,7 @@ from .serializers import Post_Serializer,Category_Serializer,Comment_Serializer
 
 
 class Posts_List(ListCreateAPIView):
-    queryset=Post.objects.all()
+    queryset=Post.objects.created()
     serializer_class = Post_Serializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -27,7 +27,12 @@ class Post_detail(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthorOrSuperUserOrReadOnly]
 
 
-
+class Post_by_category(ListAPIView):
+    serializer_class = Post_Serializer
+    def get_queryset(self):
+        category=self.kwargs.get("category")
+        posts=Post.objects.created().filter(category__name__contains=category)
+        return posts
 
 class Categorys_List(ListAPIView):
     queryset=Category.objects.all()
@@ -48,5 +53,8 @@ class Posts_after_date(ListAPIView):
     def get_queryset(self):
         dateparam=self.kwargs.get("date")
         date=datetime.strptime(dateparam,"%Y-%m-%d")
-        posts=Post.objects.filter(created__date__gte=date).order_by("-created")
+        posts=Post.objects.created().filter(created__date__gte=date)
         return posts
+
+
+#post ha az bishtarin like be kamtarin
