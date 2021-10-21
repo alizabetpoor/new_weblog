@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: sahel;
+  src: url("./assets/fonts/Sahel.ttf");
+}
+@font-face {
+  font-family: sahelbold;
+  src: url("./assets/fonts/Sahel-Bold.ttf");
+}
+html {
+  height: 100%;
+  direction: rtl;
+  margin: 0;
+  padding: 0;
+  font-family: sahel;
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100%;
+  line-height: 2;
+}
+
+#root {
+  height: 100%;
+}
