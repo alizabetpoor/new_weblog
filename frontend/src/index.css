@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
   font-family: sahel;
   src: url("./assets/fonts/Sahel.ttf");
