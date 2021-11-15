@@ -7,6 +7,9 @@ module.exports = {
         sahel: ["sahel"],
         sahelbold: ["sahelbold"],
       },
+      colors: {
+        main: "#F5F5F5",
+      },
     },
   },
   variants: {
