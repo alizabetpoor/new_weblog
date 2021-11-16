@@ -12,3 +12,8 @@
   border-radius: 0.5rem;
   background-color: rgba(0, 0, 0, 0.3);
 }
+@media only screen and (max-width: 1023.98px) {
+  .image {
+    min-width: 90%;
+  }
+}
