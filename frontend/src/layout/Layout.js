@@ -4,7 +4,9 @@ const Layout = ({ children }) => {
   return (
     <>
       <Header />
-      <div className="content mt-12 w-8/12">{children}</div>
+      <div className="content-container w-full bg-main min-h-screen">
+        <div className="content mt-12 w-full">{children}</div>
+      </div>
     </>
   );
 };
