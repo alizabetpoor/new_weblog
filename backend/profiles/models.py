@@ -20,6 +20,7 @@ class Profile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE,related_name="profile")
     display_name=models.CharField(max_length=100,null=True,blank=True)
     birthday=models.DateField(null=True,blank=True)
+    profile_photo=models.ImageField(upload_to="profile_photo",null=True,blank=True)
     phonenumber=models.CharField(max_length=13,unique=True,null=True,blank=True,validators=[validate_phonenumber])
     phone_verify=models.BooleanField(default=False,verbose_name="وریفای ایمیل")
     email_verify=models.BooleanField(default=False,verbose_name="وریفای شماره")
