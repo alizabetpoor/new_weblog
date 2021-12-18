@@ -1,5 +1,6 @@
 from django.db import models
 from profiles.models import User
+from django.contrib.auth import get_user_model
 # Create your models here.
 
 
@@ -40,6 +41,8 @@ class Post(models.Model):
 
     count_like.short_description="تعداد لایک"
 
+
+
     objects=PostManager()
 
 class Comment(models.Model):
@@ -63,3 +66,11 @@ class Comment(models.Model):
         return self.likes.count()
 
     count_like.short_description="تعداد لایک"
+
+
+class Bookmark(models.Model):
+    user=models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
+    post=models.ForeignKey(Post,on_delete=models.CASCADE)
+    created=models.DateTimeField(auto_now_add=True)
+    class Meta:
+        unique_together = ('user', 'post',)
