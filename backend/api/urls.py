@@ -6,7 +6,11 @@ from .views import (Posts_List,
     Comment_List,
     Posts_after_date,
     Post_by_category,
-    MyTokenObtainPairView
+    Profile_View,
+    User_View,
+    User_Username_View,
+    MyTokenObtainPairView,
+    Random_post,
 )
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -29,10 +33,14 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("posts/",Posts_List.as_view()),
     path("posts/<int:pk>/",Post_detail.as_view()),
+    path("posts/random/",Random_post.as_view()),
     path("posts/from/<str:date>/",Posts_after_date.as_view()),
     path("posts/category/<str:category>/",Post_by_category.as_view()),
     path("categorys/",Categorys_List.as_view()),
     path("comments/",Comment_List.as_view()),
+    path("profile/",Profile_View.as_view()),
+    path("user/me/",User_View.as_view()),
+    path("user/<str:username>/",User_Username_View.as_view()),
     path('auth/', include('djoser.urls')),
     re_path(r"^auth/jwt/create/?", MyTokenObtainPairView.as_view(), name="jwt-create"),
     re_path(r"^auth/jwt/refresh/?", views.TokenRefreshView.as_view(), name="jwt-refresh"),
