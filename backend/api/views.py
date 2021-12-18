@@ -1,11 +1,14 @@
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.generics import (
     ListCreateAPIView,
+    RetrieveAPIView,
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
+    get_object_or_404,
 )
 from posts.models import Post,Category,Comment
 from datetime import datetime
+from django.contrib.auth import get_user_model
 from .permissions import IsAuthorOrSuperUserOrReadOnly
 from .serializers import Post_Serializer,Category_Serializer,Comment_Serializer
 # Create your views here.
@@ -57,7 +60,53 @@ class Posts_after_date(ListAPIView):
         return posts
 
 
-#post ha az bishtarin like be kamtarin
+import random
+class Random_post(ListAPIView):
+    serializer_class=Post_Serializer
+    def get_queryset(self):
+
+        posts = list(Post.objects.created())
+
+        # change 3 to how many random items you want
+        random_posts = random.sample(posts, 4)
+        return random_posts
+
+
+
+
+# profile view
+from .serializers import Profile_Serializer
+from profiles.models import Profile
+class Profile_View(RetrieveAPIView):
+    serializer_class = Profile_Serializer
+    permission_classes = [IsAuthenticated]
+    def get_object(self):
+        user=self.request.user
+        return user.profile
+            
+
+# user view
+from .serializers import User_Serilizer
+class User_View(RetrieveAPIView):
+    serializer_class = User_Serilizer
+    permission_classes = [IsAuthenticated]
+    def get_object(self):
+        user=self.request.user
+        return user
+
+
+from .serializers import User_Serilizer
+class User_Username_View(RetrieveAPIView):
+    User=get_user_model()
+    serializer_class = User_Serilizer
+    queryset=User.objects.all()
+    lookup_field="username"
+    def get_obj(self):
+        queryset=self.get_queryset()
+        user=get_object_or_404(queryset,username=self.kwargs.get("username"))
+        return user
+
+
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -71,8 +120,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         token['email'] = user.email
         token['display_name'] = user.profile.display_name
-        token['phonenumber'] = user.profile.phonenumber
-        # ...
 
         return token
 
