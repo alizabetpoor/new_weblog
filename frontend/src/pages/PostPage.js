@@ -1,8 +1,8 @@
 import FullPost from "../components/FullPost/FullPost";
-const PostPage = () => {
+const PostPage = (props) => {
   return (
     <div className="flex justify-center">
-      <FullPost />
+      <FullPost {...props} />
     </div>
   );
 };
