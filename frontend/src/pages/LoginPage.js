@@ -1,7 +1,8 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
 import TextInput from "../components/Inputs/TextInput";
-
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 const initialValues = {
   username: "",
   password: "",
@@ -13,11 +14,10 @@ const validationSchema = yup.object({
 });
 
 const LoginPage = (props) => {
+  let { loginUser } = useContext(AuthContext);
   const onSubmit = (values) => {
     console.log(values);
-    localStorage.setItem("login", "true");
-    props.history.push("/");
-    window.location.reload();
+    loginUser(values.username, values.password);
   };
   const formik = useFormik({
     initialValues,
