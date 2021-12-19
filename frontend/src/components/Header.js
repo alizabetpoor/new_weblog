@@ -6,17 +6,20 @@ import { BiSearch, BiX } from "react-icons/bi";
 import userphoto from "../assets/images/profile.webp";
 import ProfileDropDown from "./DropDown/ProfileDropDown";
 import NotifDropDown from "./DropDown/NotifDrowDown";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../context/AuthContext";
 
 const Header = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [searchBox, setSearchBox] = useState(false);
+  let { user } = useContext(AuthContext);
   useEffect(() => {
-    let loginstate = localStorage.getItem("login");
-    if (loginstate) {
+    if (user) {
       setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
     }
-  }, []);
+  }, [user]);
   return (
     <>
       <header className={`${styles.header} w-full flex flex-col items-stretch`}>
