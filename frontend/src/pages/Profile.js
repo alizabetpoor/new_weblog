@@ -1,17 +1,40 @@
 import userphoto from "../assets/images/profile.webp";
 import Posts from "../components/Posts";
 import { Link } from "react-router-dom";
-const Profile = () => {
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../context/AuthContext";
+import useAxios from "../utils/UseAxios";
+const Profile = (props) => {
+  const [userProfile, setUserProfile] = useState(null);
+  const api = useAxios();
+  useEffect(() => {
+    api
+      .get(`/user/${props.match.params.username}/`)
+      .then((res) => setUserProfile(res.data))
+      .catch((err) => {
+        console.log(err);
+        setUserProfile(404);
+      });
+  }, []);
+  if (!userProfile) return <div>loading ...</div>;
+  if (userProfile === 404)
+    return <div>پروفایلی با این یوزر نیم وجود ندارد</div>;
   return (
     <div className="flex justify-center">
       <div className="lg:w-6/12 md:w-9/12 w-full px-2 md:px-0 flex flex-col space-y-10 pb-8">
         <div className="flex md:flex-row flex-col space-y-3 items-center text-black space-x-3 text-xs space-x-reverse">
           <div>
-            <img className="rounded-full h-20 w-20" src={userphoto} alt="" />
+            <img
+              className="rounded-full h-20 w-20"
+              src={userProfile.profile.profile_photo}
+              alt=""
+            />
           </div>
           <div className="flex flex-col items-start space-y-2">
             <div className="flex space-x-2 space-x-reverse">
-              <span className="text-base font-sahelbold">علی ضابط پور</span>
+              <span className="text-base font-sahelbold">
+                {userProfile.username}
+              </span>
               <button className="bg-gray-600 px-5 py-1 text-white rounded-xl">
                 + دنبال کنید
               </button>
