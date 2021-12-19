@@ -1,15 +1,15 @@
 import { useFormik } from "formik";
+import { useContext } from "react";
 import * as yup from "yup";
 import TextInput from "../components/Inputs/TextInput";
+import AuthContext from "../context/AuthContext";
 const initialValues = {
   username: "",
   email: "",
   password: "",
   password_confrim: "",
 };
-const onSubmit = (values) => {
-  console.log(values);
-};
+
 const validationSchema = yup.object({
   username: yup
     .string()
@@ -30,6 +30,11 @@ const validationSchema = yup.object({
     .oneOf([yup.ref("password"), null], "پسورد وارد شده یکسان نیست"),
 });
 const RegisterPage = () => {
+  let { signupUser } = useContext(AuthContext);
+  const onSubmit = (values) => {
+    console.log(values);
+    signupUser(values.username, values.email, values.password);
+  };
   const formik = useFormik({
     initialValues,
     onSubmit,
