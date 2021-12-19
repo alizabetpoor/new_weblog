@@ -15,11 +15,11 @@ export const AuthProvider = ({ children }) => {
   let [user, setUser] = useState(() => (token ? jwt_decode(token) : null));
   let [loading, setLoading] = useState(true);
   const history = useHistory();
-  let loginUser = (e) => {
+  let loginUser = (username, password) => {
     axios
-      .post("127.0.0.1:8000/login", {
-        username: e.username,
-        password: e.password,
+      .post("http://127.0.0.1:8000/api/v1/auth/jwt/create/", {
+        username: username,
+        password: password,
       })
       .then((res) => {
         if (res.status === 200) {
@@ -30,7 +30,25 @@ export const AuthProvider = ({ children }) => {
         } else {
           console.log("sth wrong");
         }
+      })
+      .catch((err) => {
+        console.log(err);
       });
+  };
+  let signupUser = (username, email, password) => {
+    axios
+      .post("http://127.0.0.1:8000/api/v1/auth/users/", {
+        email: email,
+        username: username,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201 && res.statusText === "Created") {
+          loginUser(username, password);
+        }
+      })
+      .catch((err) => console.log(err));
   };
   let logoutUser = () => {
     setAuthToken(null);
@@ -46,6 +64,7 @@ export const AuthProvider = ({ children }) => {
     setAuthToken,
     loginUser: loginUser,
     logoutUser: logoutUser,
+    signupUser: signupUser,
   };
   useEffect(() => {
     if (authToken) {
