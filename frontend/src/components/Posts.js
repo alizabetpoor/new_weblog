@@ -9,7 +9,7 @@ const Posts = (props) => {
   const postsRef = useRef();
   useEffect(() => {
     api
-      .get("/posts/")
+      .get(props.endpoint)
       .then((res) => {
         console.log(res.data);
         setPosts(res.data);
@@ -17,7 +17,7 @@ const Posts = (props) => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [props.endpoint]);
   useEffect(() => {
     const minusHeight = props.history.location.pathname === "/" ? 100 : 300;
     const checkScroll = () => {
