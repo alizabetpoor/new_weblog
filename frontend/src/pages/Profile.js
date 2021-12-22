@@ -67,7 +67,7 @@ const Profile = (props) => {
             را دنبال می کند
           </Link>
         </div>
-        <Posts />
+        <Posts endpoint={`/posts/user/${userProfile.username}/`} />
       </div>
     </div>
   );
