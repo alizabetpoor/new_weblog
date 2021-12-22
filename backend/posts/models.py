@@ -19,7 +19,7 @@ class PostManager(models.Manager):
 class Post(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE,related_name="posts")
     title=models.CharField(max_length=70,verbose_name="عنوان")
-    slug=models.SlugField(max_length=40,verbose_name="لینک مطلب")
+    slug=models.SlugField(max_length=40,verbose_name="لینک مطلب",null=True,blank=True)
     image=models.ImageField(upload_to="blog_images",verbose_name="عکس مطلب")
     text=models.TextField(verbose_name="متن پست")
     created=models.DateTimeField(auto_now_add=True)
