@@ -33,11 +33,15 @@ class Post_detail(RetrieveUpdateDestroyAPIView):
 class Post_by_category(ListAPIView):
     serializer_class = Post_Serializer
     def get_queryset(self):
-        category=self.kwargs.get("category")
-        posts=Post.objects.created().filter(category__name__contains=category)
+        category_id=self.kwargs.get("category")
+        posts=Post.objects.created().filter(category__id=category_id)
         return posts
 
 class Categorys_List(ListAPIView):
+    queryset=Category.objects.all()
+    serializer_class = Category_Serializer
+
+class Category_Detail(RetrieveAPIView):
     queryset=Category.objects.all()
     serializer_class = Category_Serializer
 
@@ -105,6 +109,16 @@ class User_Username_View(RetrieveAPIView):
         queryset=self.get_queryset()
         user=get_object_or_404(queryset,username=self.kwargs.get("username"))
         return user
+
+
+class User_Post(ListAPIView):
+    serializer_class=Post_Serializer
+    def get_queryset(self):
+        username=self.kwargs.get("username")
+        User=get_user_model()
+        user=User.objects.filter(username=username).first()
+        posts=user.posts
+        return posts
 
 
 
