@@ -11,6 +11,8 @@ from .views import (Posts_List,
     User_Username_View,
     MyTokenObtainPairView,
     Random_post,
+    User_Post,
+    Category_Detail,
 )
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -35,8 +37,10 @@ urlpatterns = [
     path("posts/<int:pk>/",Post_detail.as_view()),
     path("posts/random/",Random_post.as_view()),
     path("posts/from/<str:date>/",Posts_after_date.as_view()),
-    path("posts/category/<str:category>/",Post_by_category.as_view()),
+    path("posts/category/<int:category>/",Post_by_category.as_view()),
+    path("posts/user/<str:username>/",User_Post.as_view()),
     path("categorys/",Categorys_List.as_view()),
+    path("categorys/<int:pk>/",Category_Detail.as_view()),
     path("comments/",Comment_List.as_view()),
     path("profile/",Profile_View.as_view()),
     path("user/me/",User_View.as_view()),
