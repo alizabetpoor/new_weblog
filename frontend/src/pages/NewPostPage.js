@@ -2,6 +2,7 @@ import { useState } from "react";
 import { EditorState, convertToRaw } from "draft-js";
 import TextEditor from "../components/TextEditor/TextEditor";
 import useAxios from "../utils/UseAxios";
+import Uploader from "../components/Uploader/Uploader";
 import draftToHtml from "draftjs-to-html";
 import { useToasts } from "react-toast-notifications";
 
@@ -9,7 +10,6 @@ const NewPostPage = (props) => {
   const api = useAxios();
   const [formState, setFormState] = useState({
     pic: null,
-    link: "",
     title: "",
   });
   const { addToast } = useToasts();
@@ -32,7 +32,6 @@ const NewPostPage = (props) => {
     let data = new FormData();
     data.append("image", photo);
     data.append("title", formState.title);
-    data.append("slug", formState.link);
     data.append("text", text);
     api
       .post("/posts/", data)
@@ -43,7 +42,7 @@ const NewPostPage = (props) => {
             appearance: "success",
             autoDismiss: true,
           });
-          // props.history.push(`/post/${formState.link}`);
+          props.history.push(`/post/${res.data.id}`);
         }
       })
       .catch((err) => {
@@ -68,21 +67,10 @@ const NewPostPage = (props) => {
             id="title"
             placeholder="عنوان پست"
           />
-          <label htmlFor="link" className="self-start">
-            لینک پست
-          </label>
-          <input
-            onChange={formChange}
-            type="text"
-            name="link"
-            id="link"
-            placeholder="لینک پست"
-          />
-          <label htmlFor="pic" className="self-start">
-            تصویر پست
-          </label>
-          <input onChange={formChange} id="pic" name="pic" type="file" />
-
+          <label className="self-start">تصویر پست</label>
+          <div className="h-56 w-1/2 self-center">
+            <Uploader formChange={formChange} />
+          </div>
           <TextEditor
             editorState={editorState}
             setEditorState={setEditorState}
