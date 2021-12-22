@@ -10,7 +10,7 @@ const HomePage = () => {
       <RandomPosts />
       <div className="flex w-full sm:w-10/12 lg:w-8/12 justify-center lg:space-x-6 pb-10 lg:space-x-reverse">
         <main className="lg:w-8/12 sm:w-10/12 w-full">
-          <Posts />
+          <Posts endpoint="/posts/" />
         </main>
         <aside className="w-4/12 mt-3 lg:block hidden">
           <div className="text-right w-full">
