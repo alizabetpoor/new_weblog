@@ -103,6 +103,8 @@ const FullPost = (props) => {
         if (user) {
           if (res.data.likes.includes(user.user_id)) {
             setLiked(true);
+          } else {
+            setLiked(false);
           }
         }
       })
@@ -113,7 +115,7 @@ const FullPost = (props) => {
         setRelatedPosts(res.data.splice(0, 3));
       })
       .catch((err) => console.log("error"));
-  }, []);
+  }, [id]);
   if (!post) {
     return <div>loading ...</div>;
   }
