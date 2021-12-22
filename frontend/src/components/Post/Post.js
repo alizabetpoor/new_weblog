@@ -50,6 +50,9 @@ const Post = (props) => {
     }
     setCountLike(post.likes.length);
   }, []);
+  useEffect(() => {
+    setPost(props.data);
+  }, [props.data]);
 
   return (
     <div className="bg-white p-3 flex flex-col w-full rounded-md leading-10 text-gray-500">
@@ -69,17 +72,16 @@ const Post = (props) => {
             <span className="text-xs">{post.time_post_created}</span>
           </div>
         </div>
-        <div>
+        <div className="flex items-center">
           {post.category
             ? post.category.map((cat, index) => {
                 return (
-                  <Link
-                    key={index}
-                    to="/barnamenevisi"
-                    className="text-gray-700"
-                  >
-                    {cat}
-                  </Link>
+                  <div key={cat.id}>
+                    <Link to={`/category/${cat.id}`} className="text-gray-700">
+                      {cat.name}
+                    </Link>
+                    {index !== post.category.length - 1 ? "," : null}
+                  </div>
                 );
               })
             : null}
