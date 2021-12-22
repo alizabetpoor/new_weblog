@@ -14,16 +14,7 @@ class User_Serilizer(ModelSerializer):
         model=User
         fields=["id","username","first_name","last_name","profile"]
 
-class Post_Serializer(ModelSerializer):
-    author=User_Serilizer(many=False,read_only=True)
-    image=ImageField()
-    time_post_created = SerializerMethodField()
-    def get_time_post_created(self, obj):
-        return naturaltime(obj.created)
-    class Meta:
-        model=Post
-        fields="__all__"
-        #read_only_fields = ["author"]
+
 
 class Bookmark_Serializer(ModelSerializer):
     user=User_Serilizer(many=False,read_only=True)
@@ -44,3 +35,14 @@ class Category_Serializer(ModelSerializer):
         fields="__all__"
 
 
+class Post_Serializer(ModelSerializer):
+    author=User_Serilizer(many=False,read_only=True)
+    image=ImageField()
+    category=Category_Serializer(many=True)
+    time_post_created = SerializerMethodField()
+    def get_time_post_created(self, obj):
+        return naturaltime(obj.created)
+    class Meta:
+        model=Post
+        fields="__all__"
+        #read_only_fields = ["author"]
