@@ -82,8 +82,8 @@ const Header = () => {
             <NavLink exact to="/" activeClassName={styles.active}>
               خانه
             </NavLink>
-            <NavLink to="/new-posts" activeClassName={styles.active}>
-              پست های جدید
+            <NavLink to="/newpost" activeClassName={styles.active}>
+              ایجاد پست
             </NavLink>
             <NavLink to="/most-like-posts" activeClassName={styles.active}>
               پست ها با بیشترین لایک
