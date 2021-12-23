@@ -63,7 +63,7 @@ const FullPost = (props) => {
         <Link
           to={`/post/${relatedpost.id}`}
           key={relatedpost.id}
-          className="rounded-md bg-white w-1/3 h-72 flex flex-col min-w-max"
+          className={`rounded-md bg-white w-1/3 h-72 flex flex-col ${style.relatedpost}`}
         >
           <img
             className="h-28 w-full rounded-t-md"
