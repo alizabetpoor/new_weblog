@@ -8,10 +8,13 @@ import ProfileDropDown from "./DropDown/ProfileDropDown";
 import NotifDropDown from "./DropDown/NotifDrowDown";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
+import useAxios from "../utils/UseAxios";
 
 const Header = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [searchBox, setSearchBox] = useState(false);
+  const [categorys, setCategorys] = useState([]);
+  const api = useAxios();
   let { user } = useContext(AuthContext);
   useEffect(() => {
     if (user) {
@@ -20,6 +23,14 @@ const Header = () => {
       setLoggedIn(false);
     }
   }, [user]);
+  useEffect(() => {
+    api
+      .get("/categorys/")
+      .then((res) => {
+        setCategorys(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <>
       <header className={`${styles.header} w-full flex flex-col items-stretch`}>
@@ -85,15 +96,16 @@ const Header = () => {
             <NavLink to="/newpost" activeClassName={styles.active}>
               ایجاد پست
             </NavLink>
-            <NavLink to="/most-like-posts" activeClassName={styles.active}>
-              پست ها با بیشترین لایک
-            </NavLink>
-            <NavLink to="/category/khalaghiat" activeClassName={styles.active}>
-              خلاقیت
-            </NavLink>
-            <NavLink to="/category/ajib" activeClassName={styles.active}>
-              عجیب
-            </NavLink>
+            {categorys.map((category) => {
+              return (
+                <NavLink
+                  to={`/category/${category.id}`}
+                  activeClassName={styles.active}
+                >
+                  {category.name}
+                </NavLink>
+              );
+            })}
           </ul>
         </nav>
       </div>
