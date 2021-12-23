@@ -29,6 +29,7 @@ class Post(models.Model):
     class Meta:
         verbose_name="پست"
         verbose_name_plural="پست ها"
+        ordering = ['-created']
 
     def __str__(self) -> str:
         return f"عنوان مطلب:{self.title}"
