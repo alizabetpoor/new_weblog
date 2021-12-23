@@ -33,16 +33,16 @@ const HomePage = () => {
             <PopularPosts />
             <div className="mt-10 space-y-4">
               <ul className="flex text-sm text-gray-500 space-x-4 space-x-reverse mr-6">
-                <Link className="hover:text-gray-700" to="/">
+                <Link className="hover:text-gray-700 min-w-max" to="/">
                   قوانین
                 </Link>
-                <Link className="hover:text-gray-700" to="/">
+                <Link className="hover:text-gray-700 min-w-max" to="/">
                   حریم شخصی
                 </Link>
-                <Link className="hover:text-gray-700" to="/">
+                <Link className="hover:text-gray-700 min-w-max" to="/">
                   نقشه راه
                 </Link>
-                <Link className="hover:text-gray-700" to="/">
+                <Link className="hover:text-gray-700 min-w-max" to="/">
                   تماس با ما
                 </Link>
               </ul>
