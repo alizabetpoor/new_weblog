@@ -2,6 +2,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveAPIView,
+    RetrieveUpdateAPIView,
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
     get_object_or_404,
@@ -91,7 +92,7 @@ class Profile_View(RetrieveAPIView):
 
 # user view
 from .serializers import User_Serilizer
-class User_View(RetrieveAPIView):
+class User_View(RetrieveUpdateAPIView):
     serializer_class = User_Serilizer
     permission_classes = [IsAuthenticated]
     def get_object(self):
