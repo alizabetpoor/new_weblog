@@ -99,6 +99,7 @@ const Header = () => {
             {categorys.map((category) => {
               return (
                 <NavLink
+                  key={category.id}
                   to={`/category/${category.id}`}
                   activeClassName={styles.active}
                 >
