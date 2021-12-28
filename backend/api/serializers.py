@@ -3,16 +3,33 @@ from posts.models import Category,Post,Comment,Bookmark
 from profiles.models import User,Profile
 from django.contrib.humanize.templatetags.humanize import naturaltime
 
-
 class Profile_Serializer(ModelSerializer):
     class Meta:
         model=Profile
         fields="__all__"
 class User_Serilizer(ModelSerializer):
-    profile=Profile_Serializer(read_only=True,many=False)
+    profile=Profile_Serializer(many=False)
     class Meta:
         model=User
-        fields=["id","username","first_name","last_name","profile"]
+        fields=["id","username","first_name","last_name","email","profile"]
+        read_only_fields=["username","email"]
+    def update(self, instance, validated_data):
+        # print(instance)
+        print(validated_data)
+        profile_data=validated_data.pop("profile")
+        profile=instance.profile
+        instance.first_name=validated_data.get("first_name",instance.first_name)
+        instance.last_name=validated_data.get("last_name",instance.last_name)
+        instance.save()
+
+        profile.display_name=profile_data.get("display_name",profile.display_name)
+        profile.birthday=profile_data.get("birthday",profile.birthday)
+        profile.phonenumber=profile_data.get("phonenumber",profile.phonenumber)
+        profile.save()
+
+
+
+        return instance 
 
 
 
