@@ -61,6 +61,21 @@ const ProfileDropDown = () => {
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
+                <Link
+                  className={classNames(
+                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    "block px-4 py-2 text-sm cursor-pointer"
+                  )}
+                  to={`/userinformation`}
+                >
+                  <div className="flex items-center space-x-1 space-x-reverse">
+                    <span>تغییر اطلاعات</span>
+                  </div>
+                </Link>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
                 <div
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",

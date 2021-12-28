@@ -13,6 +13,7 @@ import CategoryPage from "./pages/CategoryPage";
 import PrivateRoute from "./utils/PrivateRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastProvider } from "react-toast-notifications";
+import PersonalinfoPage from "./pages/PersonalinfoPage";
 function App() {
   return (
     <div className="App flex flex-col items-center">
@@ -26,6 +27,7 @@ function App() {
               <Route path="/register" component={RegisterPage} />
               <Route path="/login" component={LoginPage} />
               <Route path="/post/:id" component={PostPage} />
+              <Route path="/userinformation" component={PersonalinfoPage} />
               <Route path="/category/:category" component={CategoryPage} />
               <Route path="/profile/:username" component={Profile} />
               <PrivateRoute>
