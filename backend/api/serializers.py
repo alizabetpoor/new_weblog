@@ -13,9 +13,10 @@ class User_Serilizer(ModelSerializer):
         model=User
         fields=["id","username","first_name","last_name","email","profile"]
         read_only_fields=["username","email"]
+
+
     def update(self, instance, validated_data):
-        # print(instance)
-        print(validated_data)
+
         profile_data=validated_data.pop("profile")
         profile=instance.profile
         instance.first_name=validated_data.get("first_name",instance.first_name)
