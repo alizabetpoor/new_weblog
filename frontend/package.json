@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@themesberg/flowbite": "^1.2.0",
     "axios": "^0.24.0",
     "babel-polyfill": "^6.26.0",
     "dayjs": "^1.10.7",
