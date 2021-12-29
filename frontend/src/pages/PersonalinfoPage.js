@@ -44,73 +44,82 @@ const PersonalinfoPage = () => {
   const { addToast } = useToasts();
   const [user, setUser] = useState(null);
   const onSubmit = (values) => {
-    console.log(formValues);
-    console.log(values);
     let diffrent = diff(formValues, values);
+    let diffrent_size = Object.keys(diffrent).length;
     if (photo) {
       let data = new FormData();
       data.append("profile_photo", photo);
-      data.append("first_name", values.first_name);
-      data.append("last_name", values.last_name);
-      console.log(data);
-    }
-    let data;
-    if (formValues.phonenumber) {
-      data = {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        profile: {
-          display_name: values.displayname,
-          birthday: convertDate(values.birthday),
-        },
-      };
-    } else {
-      data = {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        profile: {
-          phonenumber: values.phonenumber,
-          display_name: values.displayname,
-          birthday: convertDate(values.birthday),
-        },
-      };
-    }
-
-    api
-      .patch("/user/me/", data)
-      .then((res) => {
-        console.log(res);
-        if (res.status === 200 && res.statusText === "OK") {
-          setUser(res.data);
-          let formvalues = {
-            first_name: res.data.first_name,
-            last_name: res.data.last_name,
-            email: res.data.email,
-            phonenumber: res.data.profile.phonenumber || "",
-            displayname: res.data.profile.display_name || "",
-            birthday: convertDate(res.data.profile.birthday),
-          };
-          setFormValues(formvalues);
-          addToast("اطلاعات شما با موفقیت بروزرسانی شد", {
+      api
+        .patch("/profile/", data)
+        .then((res) => {
+          console.log(res);
+          setUser({ ...user, profile: res.data });
+          addToast(" عکس شما با موفقیت بروزرسانی شد", {
             autoDismiss: true,
             appearance: "success",
           });
-        } else {
-          addToast("مشکلی به وجود آمده است", {
-            autoDismiss: true,
-            appearance: "error",
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response.status === 400) {
-          addToast("مشکلی به وجود آمده است", {
-            autoDismiss: true,
-            appearance: "error",
-          });
-        }
-      });
+        })
+        .catch((err) => console.log(err));
+    }
+    let data;
+    if (diffrent_size) {
+      if (formValues.phonenumber) {
+        data = {
+          first_name: values.first_name,
+          last_name: values.last_name,
+          profile: {
+            display_name: values.displayname,
+            birthday: convertDate(values.birthday),
+          },
+        };
+      } else {
+        data = {
+          first_name: values.first_name,
+          last_name: values.last_name,
+          profile: {
+            phonenumber: values.phonenumber,
+            display_name: values.displayname,
+            birthday: convertDate(values.birthday),
+          },
+        };
+      }
+
+      api
+        .patch("/user/me/", data)
+        .then((res) => {
+          // console.log(res);
+          if (res.status === 200 && res.statusText === "OK") {
+            setUser(res.data);
+            let formvalues = {
+              first_name: res.data.first_name,
+              last_name: res.data.last_name,
+              email: res.data.email,
+              phonenumber: res.data.profile.phonenumber || "",
+              displayname: res.data.profile.display_name || "",
+              birthday: convertDate(res.data.profile.birthday),
+            };
+            setFormValues(formvalues);
+            addToast("اطلاعات شما با موفقیت بروزرسانی شد", {
+              autoDismiss: true,
+              appearance: "success",
+            });
+          } else {
+            addToast("مشکلی به وجود آمده است", {
+              autoDismiss: true,
+              appearance: "error",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response.status === 400) {
+            addToast("مشکلی به وجود آمده است", {
+              autoDismiss: true,
+              appearance: "error",
+            });
+          }
+        });
+    }
   };
   const changePhoto = () => {
     console.log(photoRef.current.click());
@@ -252,7 +261,7 @@ const PersonalinfoPage = () => {
                       type="submit"
                       disabled={!formik.isValid}
                       className={`${
-                        formik.isValid && formik.dirty
+                        (formik.isValid && formik.dirty) || photo
                           ? "bg-indigo-600 hover:bg-indigo-700"
                           : "bg-indigo-200"
                       } inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
