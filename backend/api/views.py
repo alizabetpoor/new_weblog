@@ -82,7 +82,7 @@ class Random_post(ListAPIView):
 # profile view
 from .serializers import Profile_Serializer
 from profiles.models import Profile
-class Profile_View(RetrieveAPIView):
+class Profile_View(RetrieveUpdateAPIView):
     serializer_class = Profile_Serializer
     permission_classes = [IsAuthenticated]
     def get_object(self):
