@@ -93,9 +93,12 @@ const Header = () => {
             <NavLink exact to="/" activeClassName={styles.active}>
               خانه
             </NavLink>
-            <NavLink to="/newpost" activeClassName={styles.active}>
-              ایجاد پست
-            </NavLink>
+            {user && (
+              <NavLink to="/newpost" activeClassName={styles.active}>
+                ایجاد پست
+              </NavLink>
+            )}
+
             {categorys.map((category) => {
               return (
                 <NavLink
