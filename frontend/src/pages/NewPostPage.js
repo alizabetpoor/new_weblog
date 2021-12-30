@@ -35,6 +35,7 @@ const NewPostPage = (props) => {
     let text = draftToHtml(convertToRaw(editorState.getCurrentContent()));
     let photo = formState.pic;
     let category = formState.selectedCategory.value;
+
     let data = new FormData();
     data.append("image", photo);
     data.append("title", formState.title);
