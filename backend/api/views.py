@@ -11,7 +11,7 @@ from posts.models import Post,Category,Comment
 from datetime import datetime
 from django.contrib.auth import get_user_model
 from .permissions import IsAuthorOrSuperUserOrReadOnly
-from .serializers import Post_Serializer,Category_Serializer,Comment_Serializer
+from .serializers import Post_Serializer,Category_Serializer,Comment_Serializer,Post_post_Serializer
 # Create your views here.
 
 
@@ -23,7 +23,10 @@ class Posts_List(ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+    def post(self, request, *args, **kwargs):
 
+        self.serializer_class=Post_post_Serializer
+        return self.create(request, *args, **kwargs)
 
 class Post_detail(RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()

@@ -64,3 +64,12 @@ class Post_Serializer(ModelSerializer):
         model=Post
         fields="__all__"
         #read_only_fields = ["author"]
+class Post_post_Serializer(ModelSerializer):
+    author=User_Serilizer(many=False,read_only=True)
+
+    image=ImageField()
+
+    class Meta:
+        model=Post
+        fields="__all__"
+        #read_only_fields = ["author"]
