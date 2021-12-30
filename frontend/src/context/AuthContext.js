@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { useToasts } from "react-toast-notifications";
 import { useHistory } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 const AuthContext = createContext();
@@ -8,14 +9,14 @@ export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
   let token = localStorage.getItem("authTokens");
-
+  const { addToast } = useToasts();
   let [authToken, setAuthToken] = useState(() =>
     token ? JSON.parse(token) : null
   );
   let [user, setUser] = useState(() => (token ? jwt_decode(token) : null));
   let [loading, setLoading] = useState(true);
   const history = useHistory();
-  let loginUser = (username, password) => {
+  let loginUser = async (username, password) => {
     axios
       .post("http://127.0.0.1:8000/api/v1/auth/jwt/create/", {
         username: username,
@@ -32,7 +33,12 @@ export const AuthProvider = ({ children }) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        for (let elem in err.response.data) {
+          addToast(err.response.data[elem], {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
       });
   };
   let signupUser = (username, email, password) => {
@@ -48,7 +54,14 @@ export const AuthProvider = ({ children }) => {
           loginUser(username, password);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        for (let elem in err.response.data) {
+          addToast(err.response.data[elem], {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      });
   };
   let logoutUser = () => {
     setAuthToken(null);
