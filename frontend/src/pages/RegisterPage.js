@@ -50,15 +50,27 @@ const RegisterPage = () => {
         className="md:w-2/5 w-4/5 bg-white shadow-md p-3 rounded-sm space-y-2"
       >
         <h2 className="font-sahelbold">ثبت نام</h2>
-        <TextInput name="username" formik={formik} placeholder="یوزرنیم" />
-        <TextInput name="email" formik={formik} placeholder="ایمیل" />
         <TextInput
+          name="username"
+          checkvalid={true}
+          formik={formik}
+          placeholder="یوزرنیم"
+        />
+        <TextInput
+          name="email"
+          formik={formik}
+          placeholder="ایمیل"
+          checkvalid={true}
+        />
+        <TextInput
+          checkvalid={true}
           name="password"
           type="password"
           formik={formik}
           placeholder="پسورد"
         />
         <TextInput
+          checkvalid={true}
           name="password_confrim"
           formik={formik}
           type="password"
