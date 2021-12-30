@@ -6,9 +6,11 @@ const Loader = (props) => (
     speed={1.5}
     width={700}
     height={260}
+    title="در حال پردازش"
     viewBox="0 0 600 260"
     backgroundColor="#f3f3f3"
     foregroundColor="#ecebeb"
+    style={{ width: "100%" }}
     {...props}
   >
     <rect x="70" y="8" rx="3" ry="3" width="88" height="6" />
