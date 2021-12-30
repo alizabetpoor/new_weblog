@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Post from "./Post/Post";
 import { withRouter } from "react-router-dom";
+import Loader from "./Loader";
 import useAxios from "../utils/UseAxios";
 const Posts = (props) => {
   const [countPosts, setCountPosts] = useState(4);
@@ -34,7 +35,13 @@ const Posts = (props) => {
     };
   }, [countPosts]);
   if (!posts) {
-    return <div>loading ...</div>;
+    return (
+      <div className="space-y-6 w-full">
+        <Loader />
+        <Loader />
+        <Loader />
+      </div>
+    );
   }
   return (
     <div ref={postsRef} className="posts space-y-6 w-full">
