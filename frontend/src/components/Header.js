@@ -41,7 +41,7 @@ const Header = () => {
         >
           <div className="flex relative min-w-min lg:w-10/12 w-full">
             <input
-              className="w-full outline-none placeholder-black lg:pr-0 pr-4"
+              className="w-full focus:ring-0 focus:outline-none border-0 outline-none placeholder-black lg:pr-0 pr-4"
               type="search"
               placeholder="در بین مقالات ، نویسندگان و ... سرچ کنید"
             />
