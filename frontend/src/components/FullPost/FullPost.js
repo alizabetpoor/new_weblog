@@ -10,13 +10,16 @@ import Reply from "../Comment/Reply";
 import useAxios from "../../utils/UseAxios";
 import Posts from "../Posts";
 import AuthContext from "../../context/AuthContext";
+import { useRef } from "react";
 const FullPost = (props) => {
   const { user } = useContext(AuthContext);
   const [liked, setLiked] = useState(false);
   const [post, setPost] = useState(null);
+  const [comments, setComments] = useState(null);
   const api = useAxios();
   const [relatedPosts, setRelatedPosts] = useState(null);
   const id = props.match.params.id;
+  const commentRef = useRef();
   const [countLike, setCountLike] = useState(null);
   const { addToast } = useToasts();
   const likeHandler = () => {
@@ -60,8 +63,7 @@ const FullPost = (props) => {
   const relatedPost = relatedPosts ? (
     relatedPosts.map((relatedpost) => {
       return (
-        <Link
-          to={`/post/${relatedpost.id}`}
+        <div
           key={relatedpost.id}
           className={`rounded-md bg-white w-1/3 h-72 flex flex-col ${style.relatedpost}`}
         >
@@ -71,11 +73,17 @@ const FullPost = (props) => {
             alt=""
           />
           <div className="p-3 flex flex-col justify-between flex-grow">
-            <h3 className="text-right font-sahelbold mt-5">
+            <Link
+              to={`/post/${relatedpost.id}`}
+              className="text-right font-sahelbold mt-5"
+            >
               {relatedpost.title}
-            </h3>
+            </Link>
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 space-x-reverse">
+              <Link
+                to={`/profile/${relatedpost.author.username}`}
+                className="flex items-center space-x-2 space-x-reverse"
+              >
                 <img
                   className="w-9 h-9 rounded-full"
                   src={relatedpost.author.profile.profile_photo}
@@ -84,11 +92,11 @@ const FullPost = (props) => {
                 <span className="text-blue-500 text-sm">
                   {relatedpost.author.username}
                 </span>
-              </div>
+              </Link>
               <BiBookmark className="text-2xl text-gray-500 cursor-pointer" />
             </div>
           </div>
-        </Link>
+        </div>
       );
     })
   ) : (
@@ -115,6 +123,14 @@ const FullPost = (props) => {
         setRelatedPosts(res.data.splice(0, 3));
       })
       .catch((err) => console.log("error"));
+    api
+      .get(`/comments/post/${id}/`)
+      .then((res) => {
+        setComments(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [id]);
   if (!post) {
     return <div>loading ...</div>;
@@ -138,11 +154,7 @@ const FullPost = (props) => {
               + دنبال کنید
             </button>
           </div>
-          <div>
-            <span className="text-gray-400">
-              علاقه مند به دیجیتال مارکتینگ www.sheragim.ir
-            </span>
-          </div>
+          <div></div>
           <div>
             <span className="text-gray-600">{post.time_post_created}</span>
           </div>
@@ -161,24 +173,17 @@ const FullPost = (props) => {
             dangerouslySetInnerHTML={{ __html: post.text }}
           />
           <div className="flex space-x-3 space-x-reverse text-base">
-            <Link
-              to="/category/2"
-              className="px-5 py-1 bg-gray-300 text-gray-600 rounded-sm"
-            >
-              سیاسی
-            </Link>
-            <Link
-              to="/category/2"
-              className="px-5 py-1 bg-gray-300 text-gray-600 rounded-sm"
-            >
-              اخبار
-            </Link>
-            <Link
-              to="/category/2"
-              className="px-5 py-1 bg-gray-300 text-gray-600 rounded-sm"
-            >
-              ایران
-            </Link>
+            {post.category.map((category) => {
+              return (
+                <Link
+                  key={category.id}
+                  to={`/category/${category.id}`}
+                  className="px-5 py-1 bg-gray-300 text-gray-600 rounded-sm"
+                >
+                  {category.name}
+                </Link>
+              );
+            })}
           </div>
           <div className="flex sm:flex-row space-y-3 sm:space-y-0 flex-col justify-between self-stretch items-center">
             <div className="flex items-center text-2xl space-x-3 space-x-reverse text-gray-500">
@@ -193,7 +198,12 @@ const FullPost = (props) => {
                 <span className="text-xs">{countLike}</span>
               </div>
               <div className="flex items-center space-x-2 space-x-reverse">
-                <BiMessageRounded className="cursor-pointer" />
+                <BiMessageRounded
+                  onClick={() => {
+                    window.scrollTo(0, commentRef.current.offsetTop);
+                  }}
+                  className="cursor-pointer"
+                />
                 <span className="text-xs">3 نظر</span>
               </div>
             </div>
@@ -216,14 +226,17 @@ const FullPost = (props) => {
             </div>
             <div className="flex flex-col justify-between items-start">
               <div className="flex space-x-3 space-x-reverse">
-                <h3 className="font-sahelbold">{post.author.username}</h3>
+                <Link
+                  to={`/profile/${post.author.username}`}
+                  className="font-sahelbold"
+                >
+                  {post.author.username}
+                </Link>
                 <span className="cursor-pointer rounded-md px-3 py-1 self-center text-xs border border-blue-300 text-blue-400">
                   دنبال کردن
                 </span>
               </div>
-              <div>
-                <span className="text-xs">علاقه مند به دیجیتال مارکتینگ</span>
-              </div>
+              <div></div>
             </div>
           </div>
         </div>
@@ -233,12 +246,13 @@ const FullPost = (props) => {
             {relatedPost}
           </div>
         </div>
-        <div className="py-12 flex flex-col items-stretch">
+        <div ref={commentRef} className="py-12 flex flex-col items-stretch">
           <p className="self-start">پاسخ ها</p>
-          <Reply />
+          <Reply setComments={setComments} postid={post.id} />
           <div className="space-y-3 mt-5">
-            <Comment />
-            <Comment />
+            {comments?.map((comment) => {
+              return <Comment key={comment.id} comment={comment} />;
+            })}
           </div>
         </div>
       </div>
