@@ -45,18 +45,18 @@ class Post(models.Model):
 
 
     objects=PostManager()
-
 class Comment(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE,related_name="comments")
     post=models.ForeignKey(Post,on_delete=models.CASCADE,related_name="comments")
     text=models.TextField(verbose_name="متن کامنت")
     likes=models.ManyToManyField(User,blank=True)
+    created=models.DateTimeField(auto_now_add=True)
     parent_comment=models.ForeignKey("self",blank=True,null=True,on_delete=models.CASCADE,related_name="replies")
 
     class Meta:
         verbose_name="کامنت"
         verbose_name_plural="کامنت ها"
-
+        ordering = ['-created']
 
     def count_replies(self):
         return self.replies.count() 
