@@ -1,3 +1,4 @@
+from typing import List
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.generics import (
     ListCreateAPIView,
@@ -11,7 +12,13 @@ from posts.models import Post,Category,Comment
 from datetime import datetime
 from django.contrib.auth import get_user_model
 from .permissions import IsAuthorOrSuperUserOrReadOnly
-from .serializers import Post_Serializer,Category_Serializer,Comment_Serializer,Post_post_Serializer
+from .serializers import (
+    Post_Serializer,
+    Category_Serializer,
+    Comment_Serializer,
+    Post_post_Serializer,
+    Post_Min_Serializer,
+)
 from posts.pagination import Post_Pagination
 # Create your views here.
 
@@ -58,8 +65,19 @@ class Comment_List(ListCreateAPIView):
     queryset=Comment.objects.all()
     serializer_class = Comment_Serializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+class Comment_Detail(RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = Comment_Serializer
+    permission_classes = [IsAuthorOrSuperUserOrReadOnly]
 
-
+class Comments_Post(ListAPIView):
+    serializer_class=Comment_Serializer
+    def get_queryset(self):
+        post_id=self.kwargs.get("post_id")
+        comments=Comment.objects.filter(post__id=post_id)
+        return comments
 
 #post az in tarikh be bad
 class Posts_after_date(ListAPIView):
@@ -83,6 +101,13 @@ class Random_post(ListAPIView):
         # change 3 to how many random items you want
         random_posts = random.sample(posts, 4)
         return random_posts
+
+class Popular_Post(ListAPIView):
+    serializer_class=Post_Min_Serializer
+    def get_queryset(self):
+        posts=Post.objects.order_by("-likes")[0:5]
+        return posts
+
 
 
 
