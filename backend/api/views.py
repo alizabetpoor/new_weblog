@@ -12,6 +12,7 @@ from datetime import datetime
 from django.contrib.auth import get_user_model
 from .permissions import IsAuthorOrSuperUserOrReadOnly
 from .serializers import Post_Serializer,Category_Serializer,Comment_Serializer,Post_post_Serializer
+from posts.pagination import Post_Pagination
 # Create your views here.
 
 
@@ -19,7 +20,7 @@ class Posts_List(ListCreateAPIView):
     queryset=Post.objects.created()
     serializer_class = Post_Serializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-
+    pagination_class = Post_Pagination
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -36,6 +37,8 @@ class Post_detail(RetrieveUpdateDestroyAPIView):
 
 class Post_by_category(ListAPIView):
     serializer_class = Post_Serializer
+    pagination_class = Post_Pagination
+
     def get_queryset(self):
         category_id=self.kwargs.get("category")
         posts=Post.objects.created().filter(category__id=category_id)
@@ -61,6 +64,8 @@ class Comment_List(ListCreateAPIView):
 #post az in tarikh be bad
 class Posts_after_date(ListAPIView):
     serializer_class=Post_Serializer
+    pagination_class = Post_Pagination
+
     def get_queryset(self):
         dateparam=self.kwargs.get("date")
         date=datetime.strptime(dateparam,"%Y-%m-%d")
@@ -116,12 +121,14 @@ class User_Username_View(RetrieveAPIView):
 
 
 class User_Post(ListAPIView):
+
     serializer_class=Post_Serializer
+    pagination_class = Post_Pagination
     def get_queryset(self):
         username=self.kwargs.get("username")
         User=get_user_model()
-        user=User.objects.filter(username=username).first()
-        posts=user.posts
+        user=User.objects.filter(username=username)
+        posts=Post.objects.filter(author__username=username)
         return posts
 
 
