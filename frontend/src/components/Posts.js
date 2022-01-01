@@ -1,39 +1,82 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useCallback, useState, forwardRef } from "react";
 import Post from "./Post/Post";
 import { withRouter } from "react-router-dom";
 import Loader from "./Loader";
 import useAxios from "../utils/UseAxios";
+import axios from "axios";
 const Posts = (props) => {
-  const [countPosts, setCountPosts] = useState(4);
   const api = useAxios();
+  const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState(null);
+  const [nextPageNumber, setNextPageNumber] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
   const postsRef = useRef();
+  const observer = useRef();
+  const lastPost = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          console.log("visible");
+          setLoading(true);
+          setNextPageNumber((prev) => {
+            loadNextPage(prev + 1);
+            return prev + 1;
+          });
+        }
+      });
+      if (node) {
+        observer.current.observe(node);
+      }
+      console.log(node);
+    },
+    [hasMore, loading]
+  );
   useEffect(() => {
     api
       .get(props.endpoint)
       .then((res) => {
         console.log(res.data);
-        setPosts(res.data);
+        if (res.data.next) {
+          setHasMore(true);
+        } else {
+          setHasMore(false);
+        }
+        setPosts(res.data.results);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [props.endpoint]);
-  useEffect(() => {
-    const minusHeight = props.history.location.pathname === "/" ? 100 : 300;
-    const checkScroll = () => {
-      if (
-        postsRef.current &&
-        window.scrollY > postsRef.current.offsetHeight - minusHeight
-      ) {
-        setCountPosts((last) => last + 4);
-      }
-    };
-    window.addEventListener("scroll", checkScroll);
+  const loadNextPage = (nextpage) => {
+    let cancel;
+    api
+      .get(props.endpoint + `?page=${nextpage}`, {
+        cancelToken: new axios.CancelToken((c) => (cancel = c)),
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.next) {
+          setHasMore(true);
+        } else {
+          setHasMore(false);
+        }
+        setPosts((prevposts) => {
+          return [...prevposts, ...res.data.results];
+        });
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (axios.isCancel(err)) return;
+      });
     return () => {
-      window.removeEventListener("scroll", checkScroll);
+      cancel();
     };
-  }, [countPosts]);
+  };
   if (!posts) {
     return (
       <div className="space-y-6 w-full">
@@ -46,10 +89,16 @@ const Posts = (props) => {
   return (
     <div ref={postsRef} className="posts space-y-6 w-full">
       {posts.map((post, index) => {
-        if (index + 1 < countPosts) {
-          return <Post data={post} key={index} />;
+        if (posts.length === index + 1) {
+          return (
+            <div ref={lastPost} key={index}>
+              <Post data={post} />
+            </div>
+          );
         }
+        return <Post data={post} key={index} />;
       })}
+      {loading && <Loader />}
     </div>
   );
 };
