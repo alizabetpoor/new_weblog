@@ -7,6 +7,16 @@ class Profile_Serializer(ModelSerializer):
     class Meta:
         model=Profile
         fields="__all__"
+    # def __init__(self, *args, **kwargs):
+    #     super(Profile_Serializer, self).__init__(*args, **kwargs)
+
+    #     request = self.context['request']
+
+class Profile_Post_Serializer(ModelSerializer):
+    class Meta:
+        model=Profile
+        exclude=["phonenumber","phone_verify","email_verify","birthday"]
+
 class User_Serilizer(ModelSerializer):
     profile=Profile_Serializer(many=False)
     class Meta:
@@ -33,6 +43,15 @@ class User_Serilizer(ModelSerializer):
         return instance 
 
 
+class User_Post_Serilizer(ModelSerializer):
+    profile=Profile_Post_Serializer(many=False)
+    class Meta:
+        model=User
+        fields=["id","username","first_name","last_name","profile"]
+        read_only_fields=["username","email"]
+
+
+
 
 class Bookmark_Serializer(ModelSerializer):
     user=User_Serilizer(many=False,read_only=True)
@@ -42,6 +61,10 @@ class Bookmark_Serializer(ModelSerializer):
         depth=1
 
 class Comment_Serializer(ModelSerializer):
+    author=User_Post_Serilizer(many=False,read_only=True)
+    time_comment_created = SerializerMethodField()
+    def get_time_comment_created(self, obj):
+        return naturaltime(obj.created)
     class Meta:
         model=Comment
         fields="__all__"
@@ -54,7 +77,7 @@ class Category_Serializer(ModelSerializer):
 
 
 class Post_Serializer(ModelSerializer):
-    author=User_Serilizer(many=False,read_only=True)
+    author=User_Post_Serilizer(many=False,read_only=True)
     image=ImageField()
     category=Category_Serializer(many=True)
     time_post_created = SerializerMethodField()
@@ -64,8 +87,18 @@ class Post_Serializer(ModelSerializer):
         model=Post
         fields="__all__"
         #read_only_fields = ["author"]
+
+
+class Post_Min_Serializer(ModelSerializer):
+    author=User_Post_Serilizer(many=False,read_only=True)
+
+    class Meta:
+        model=Post
+        fields=["id","author","title"]
+
+
 class Post_post_Serializer(ModelSerializer):
-    author=User_Serilizer(many=False,read_only=True)
+    author=User_Post_Serilizer(many=False,read_only=True)
 
     image=ImageField()
 
