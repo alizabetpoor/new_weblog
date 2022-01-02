@@ -106,8 +106,21 @@ const NewPostPage = (props) => {
             setEditorState={setEditorState}
           />
           <button
-            className="bg-blue-500 rounded-md py-2 text-white"
+            className={`py-2 ${
+              formState.pic &&
+              formState.selectedCategory &&
+              formState.title &&
+              editorState.getCurrentContent().getPlainText()
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-blue-200"
+            }  transition-colors rounded-md text-white`}
             type="submit"
+            disabled={
+              !formState.pic ||
+              !formState.selectedCategory ||
+              !formState.title ||
+              !editorState.getCurrentContent().getPlainText()
+            }
           >
             ارسال پست
           </button>
