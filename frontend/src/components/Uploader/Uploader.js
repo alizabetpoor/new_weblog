@@ -67,6 +67,13 @@ const Uploader = ({ formChange }) => {
   const deletePhoto = () => {
     setDragOver(false);
     setImg(false);
+    let e = {
+      target: {
+        files: [null],
+        name: "pic",
+      },
+    };
+    formChange(e);
   };
   return (
     <div className="flex justify-center items-center p-4 flex-col space-y-2 h-full bg-purple-800  text-white">
