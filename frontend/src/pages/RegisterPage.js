@@ -1,8 +1,9 @@
 import { useFormik } from "formik";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import * as yup from "yup";
 import TextInput from "../components/Inputs/TextInput";
 import AuthContext from "../context/AuthContext";
+import Recaptcha from "../components/Recaptcha";
 const initialValues = {
   username: "",
   email: "",
@@ -31,6 +32,7 @@ const validationSchema = yup.object({
 });
 const RegisterPage = () => {
   let { signupUser } = useContext(AuthContext);
+  const [enabledForm, setEnabledForm] = useState(false);
   const onSubmit = (values) => {
     console.log(values);
     signupUser(values.username, values.email, values.password);
@@ -44,10 +46,10 @@ const RegisterPage = () => {
 
   return (
     <div className="flex flex-col items-center ">
-      <div className="h-2 md:w-2/5 w-4/5 bg-blue-500"></div>
+      <div className="h-2 lg:w-2/5 md:w-3/5 w-11/12 bg-blue-500"></div>
       <form
         onSubmit={formik.handleSubmit}
-        className="md:w-2/5 w-4/5 bg-white shadow-md p-3 rounded-sm space-y-2"
+        className="lg:w-2/5 md:w-3/5 w-11/12 bg-white shadow-md p-3 rounded-sm space-y-2"
       >
         <h2 className="font-sahelbold">ثبت نام</h2>
         <TextInput
@@ -76,12 +78,15 @@ const RegisterPage = () => {
           type="password"
           placeholder="تایید پسورد"
         />
+        <Recaptcha setEnabledForm={setEnabledForm} />
         <button
           className={`p-2 ${
-            formik.isValid ? "bg-blue-500 hover:bg-blue-600" : "bg-blue-200"
+            formik.isValid && enabledForm
+              ? "bg-blue-500 hover:bg-blue-600"
+              : "bg-blue-200"
           }  transition-colors w-full rounded-md text-white`}
           type="submit"
-          disabled={!formik.isValid}
+          disabled={!formik.isValid || !enabledForm}
         >
           ثبت نام
         </button>
