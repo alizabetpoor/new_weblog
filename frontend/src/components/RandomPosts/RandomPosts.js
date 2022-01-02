@@ -1,7 +1,6 @@
-import postimg from "../../assets/images/post.jpeg";
-import profileimg from "../../assets/images/profile.webp";
 import styles from "./RandomPosts.module.css";
 import { useState, useEffect } from "react";
+import ReactLoading from "react-loading";
 import { Link } from "react-router-dom";
 import useAxios from "../../utils/UseAxios";
 const RandomPosts = () => {
@@ -13,7 +12,10 @@ const RandomPosts = () => {
       .then((res) => setPosts(res.data))
       .catch((err) => console.log(err));
   }, []);
-  if (!posts) return <div>loading ...</div>;
+  if (!posts)
+    return (
+      <ReactLoading type="cubes" color="#236df7" height={"20%"} width={"20%"} />
+    );
   return (
     <div className="random-posts flex flex-col w-10/12 overflow-x-auto">
       <p className="self-start text-gray-500 leading-10">
