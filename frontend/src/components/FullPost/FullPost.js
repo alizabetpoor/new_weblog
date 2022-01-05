@@ -1,16 +1,16 @@
 import userphoto from "../../assets/images/profile.webp";
-import postphoto from "../../assets/images/post.jpeg";
 import style from "./FullPost.module.css";
 import { BiBookmark, BiHeart, BiMessageRounded } from "react-icons/bi";
 import { useContext, useEffect, useState } from "react";
 import Comment from "../Comment/Comment";
 import { useToasts } from "react-toast-notifications";
 import { Link } from "react-router-dom";
+import ReactLoading from "react-loading";
 import Reply from "../Comment/Reply";
 import useAxios from "../../utils/UseAxios";
-import Posts from "../Posts";
 import AuthContext from "../../context/AuthContext";
 import { useRef } from "react";
+import FollowingButton from "../FollowingButton";
 const FullPost = (props) => {
   const { user } = useContext(AuthContext);
   const [liked, setLiked] = useState(false);
@@ -100,7 +100,7 @@ const FullPost = (props) => {
       );
     })
   ) : (
-    <div>loading ...</div>
+    <ReactLoading type="cubes" color="#236df7" height={"20%"} width={"20%"} />
   );
   useEffect(() => {
     api
@@ -133,7 +133,9 @@ const FullPost = (props) => {
       });
   }, [id]);
   if (!post) {
-    return <div>loading ...</div>;
+    return (
+      <ReactLoading type="cubes" color="#236df7" height={"20%"} width={"20%"} />
+    );
   }
   return (
     <div className={`${style.fullpost} space-y-12 flex flex-col items-stretch`}>
@@ -150,9 +152,7 @@ const FullPost = (props) => {
             <span className="text-base font-sahelbold">
               {post.author.username}
             </span>
-            <button className="bg-gray-600 px-5 py-1 text-white rounded-xl">
-              + دنبال کنید
-            </button>
+            <FollowingButton following_user={post.author} />
           </div>
           <div></div>
           <div>

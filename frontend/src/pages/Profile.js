@@ -1,11 +1,12 @@
-import userphoto from "../assets/images/profile.webp";
 import Posts from "../components/Posts";
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import AuthContext from "../context/AuthContext";
+import { useEffect, useState } from "react";
 import useAxios from "../utils/UseAxios";
+import ReactLoading from "react-loading";
+import FollowingButton from "../components/FollowingButton";
 const Profile = (props) => {
   const [userProfile, setUserProfile] = useState(null);
+  const [reset, setReset] = useState(false);
   const api = useAxios();
   useEffect(() => {
     api
@@ -16,7 +17,10 @@ const Profile = (props) => {
         setUserProfile(404);
       });
   }, []);
-  if (!userProfile) return <div>loading ...</div>;
+  if (!userProfile)
+    return (
+      <ReactLoading type="cubes" color="#236df7" height={"20%"} width={"20%"} />
+    );
   if (userProfile === 404)
     return <div>پروفایلی با این یوزر نیم وجود ندارد</div>;
   return (
@@ -35,15 +39,9 @@ const Profile = (props) => {
               <span className="text-base font-sahelbold">
                 {userProfile.username}
               </span>
-              <button className="bg-gray-600 px-5 py-1 text-white rounded-xl">
-                + دنبال کنید
-              </button>
+              <FollowingButton following_user={userProfile} />
             </div>
-            <div>
-              <span className="text-gray-400">
-                علاقه مند به دیجیتال مارکتینگ www.sheragim.ir
-              </span>
-            </div>
+            <div></div>
           </div>
         </div>
         <div className="flex md:justify-start justify-center space-x-7 space-x-reverse text-gray-600 text-base border-b-4 pb-14 border-gray-500 border-dotted">
@@ -53,7 +51,7 @@ const Profile = (props) => {
           >
             توسط{" "}
             <span className="text-black font-sahelbold font-extrabold underline">
-              110
+              {userProfile.profile.followers.length}
             </span>{" "}
             نفر دنبال می شود
           </Link>
@@ -62,7 +60,7 @@ const Profile = (props) => {
             className="hover:text-black"
           >
             <span className="text-black font-sahelbold font-extrabold underline">
-              110
+              {userProfile.profile.following.length}
             </span>{" "}
             را دنبال می کند
           </Link>
