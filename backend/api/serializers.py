@@ -69,7 +69,7 @@ class Bookmark_Serializer(ModelSerializer):
     class Meta:
         model=Bookmark
         fields="__all__"
-        depth=1
+
 
 class Comment_Serializer(ModelSerializer):
     author=User_Post_Serilizer(many=False,read_only=True)
