@@ -16,6 +16,8 @@ from .views import (Posts_List,
     Popular_Post,
     Comments_Post,
     Comment_Detail,
+    Following,
+    Following_Delete,
 )
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -48,6 +50,8 @@ urlpatterns = [
     path("comments/",Comment_List.as_view()),
     path("comments/<int:pk>/",Comment_Detail.as_view()),
     path("comments/post/<int:post_id>/",Comments_Post.as_view()),
+    path("following/",Following.as_view()),
+    path("following/<int:user>/<int:following_user>/",Following_Delete.as_view()),
     path("profile/",Profile_View.as_view()),
     path("user/me/",User_View.as_view()),
     path("user/<str:username>/",User_Username_View.as_view()),
