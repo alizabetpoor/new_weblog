@@ -1,9 +1,20 @@
-from rest_framework.serializers import ModelSerializer,SerializerMethodField,ImageField
+from rest_framework.serializers import ModelSerializer,SerializerMethodField,ImageField,ReadOnlyField
 from posts.models import Category,Post,Comment,Bookmark
-from profiles.models import User,Profile
+from profiles.models import User,Profile,UserFollowing
 from django.contrib.humanize.templatetags.humanize import naturaltime
 
+
+
+class Following_Serializer(ModelSerializer):
+    class Meta:
+        model=UserFollowing
+        exclude=["created"]
+
+
+
 class Profile_Serializer(ModelSerializer):
+    following = ReadOnlyField(source="get_following")
+    followers = ReadOnlyField(source="get_followers")
     class Meta:
         model=Profile
         fields="__all__"
