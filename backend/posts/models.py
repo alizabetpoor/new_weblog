@@ -70,8 +70,10 @@ class Comment(models.Model):
 
 
 class Bookmark(models.Model):
-    user=models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
+    user=models.ForeignKey(get_user_model(),on_delete=models.CASCADE,related_name="bookmarks")
     post=models.ForeignKey(Post,on_delete=models.CASCADE)
     created=models.DateTimeField(auto_now_add=True)
     class Meta:
         unique_together = ('user', 'post',)
+    def __str__(self) -> str:
+        return f"user:{self.user.username} bookmarked post:{self.post.title}"
