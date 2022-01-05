@@ -12,11 +12,12 @@ from rest_framework.generics import (
 )
 from .mixins import MultipleFieldLookupMixin
 from profiles.models import UserFollowing
-from posts.models import Post,Category,Comment
+from posts.models import Post,Category,Comment,Bookmark
 from datetime import datetime
 from django.contrib.auth import get_user_model
 from .permissions import IsAuthorOrSuperUserOrReadOnly,IsUserOrReadOnly
 from .serializers import (
+    Bookmark_Serializer,
     Following_Serializer,
     Post_Serializer,
     Category_Serializer,
@@ -129,6 +130,25 @@ class Comments_Post(ListAPIView):
         comments=Comment.objects.filter(post__id=post_id)
         return comments
 #comment views end
+
+
+#bookmark view start
+
+class Bookmark_List(ListCreateAPIView):
+    serializer_class=Bookmark_Serializer
+    queryset=Bookmark.objects.all()
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class Bookmark_Delete(MultipleFieldLookupMixin,RetrieveDestroyAPIView):
+    serializer_class=Bookmark_Serializer
+    queryset=Bookmark.objects.all()
+    permission_classes=[IsUserOrReadOnly]
+    lookup_fields  =  ('user', 'post')
+
+
+
+#bookmark view end
 
 #following view start
 
