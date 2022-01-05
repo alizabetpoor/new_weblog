@@ -1,18 +1,23 @@
 from typing import List
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.generics import (
+    CreateAPIView,
     ListCreateAPIView,
     RetrieveAPIView,
+    RetrieveDestroyAPIView,
     RetrieveUpdateAPIView,
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
     get_object_or_404,
 )
+from .mixins import MultipleFieldLookupMixin
+from profiles.models import UserFollowing
 from posts.models import Post,Category,Comment
 from datetime import datetime
 from django.contrib.auth import get_user_model
-from .permissions import IsAuthorOrSuperUserOrReadOnly
+from .permissions import IsAuthorOrSuperUserOrReadOnly,IsUserOrReadOnly
 from .serializers import (
+    Following_Serializer,
     Post_Serializer,
     Category_Serializer,
     Comment_Serializer,
@@ -23,6 +28,8 @@ from posts.pagination import Post_Pagination
 # Create your views here.
 
 
+
+#post views start
 class Posts_List(ListCreateAPIView):
     queryset=Post.objects.created()
     serializer_class = Post_Serializer
@@ -50,34 +57,6 @@ class Post_by_category(ListAPIView):
         category_id=self.kwargs.get("category")
         posts=Post.objects.created().filter(category__id=category_id)
         return posts
-
-class Categorys_List(ListAPIView):
-    queryset=Category.objects.all()
-    serializer_class = Category_Serializer
-
-class Category_Detail(RetrieveAPIView):
-    queryset=Category.objects.all()
-    serializer_class = Category_Serializer
-
-
-
-class Comment_List(ListCreateAPIView):
-    queryset=Comment.objects.all()
-    serializer_class = Comment_Serializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-class Comment_Detail(RetrieveUpdateDestroyAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = Comment_Serializer
-    permission_classes = [IsAuthorOrSuperUserOrReadOnly]
-
-class Comments_Post(ListAPIView):
-    serializer_class=Comment_Serializer
-    def get_queryset(self):
-        post_id=self.kwargs.get("post_id")
-        comments=Comment.objects.filter(post__id=post_id)
-        return comments
 
 #post az in tarikh be bad
 class Posts_after_date(ListAPIView):
@@ -108,11 +87,71 @@ class Popular_Post(ListAPIView):
         posts=Post.objects.order_by("-likes")[0:5]
         return posts
 
+#post views end
+
+
+
+#category views start
+
+
+class Categorys_List(ListAPIView):
+    queryset=Category.objects.all()
+    serializer_class = Category_Serializer
+
+class Category_Detail(RetrieveAPIView):
+    queryset=Category.objects.all()
+    serializer_class = Category_Serializer
+
+
+#category views end
 
 
 
 
-# profile view
+#comment views start
+
+
+class Comment_List(ListCreateAPIView):
+    queryset=Comment.objects.all()
+    serializer_class = Comment_Serializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+class Comment_Detail(RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = Comment_Serializer
+    permission_classes = [IsAuthorOrSuperUserOrReadOnly]
+
+class Comments_Post(ListAPIView):
+    serializer_class=Comment_Serializer
+    def get_queryset(self):
+        post_id=self.kwargs.get("post_id")
+        comments=Comment.objects.filter(post__id=post_id)
+        return comments
+#comment views end
+
+#following view start
+
+
+class Following(CreateAPIView):
+    serializer_class=Following_Serializer
+    queryset=UserFollowing.objects.all()
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class Following_Delete(MultipleFieldLookupMixin,RetrieveDestroyAPIView):
+    serializer_class=Following_Serializer
+    queryset=UserFollowing.objects.all()
+    permission_classes=[IsUserOrReadOnly]
+    lookup_fields  =  ('user', 'following_user')
+
+
+#following view end
+
+
+# profile views start
+
+
 from .serializers import Profile_Serializer
 from profiles.models import Profile
 class Profile_View(RetrieveUpdateAPIView):
@@ -121,9 +160,12 @@ class Profile_View(RetrieveUpdateAPIView):
     def get_object(self):
         user=self.request.user
         return user.profile
-            
+        
+# profile views end
 
-# user view
+
+
+# user views start
 from .serializers import User_Serilizer
 class User_View(RetrieveUpdateAPIView):
     serializer_class = User_Serilizer
@@ -156,8 +198,11 @@ class User_Post(ListAPIView):
         posts=Post.objects.filter(author__username=username)
         return posts
 
+# user views end
 
 
+
+#jwt view
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import json
