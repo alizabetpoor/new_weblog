@@ -3,7 +3,7 @@ import useAxios from "../utils/UseAxios";
 import { useToasts } from "react-toast-notifications";
 import { useContext, useEffect } from "react";
 import { useState } from "react";
-const FollowingButton = ({ following_user, setReset }) => {
+const FollowingButton = ({ following_user, span }) => {
   const api = useAxios();
   const { addToast } = useToasts();
   const { user } = useContext(AuthContext);
@@ -63,16 +63,29 @@ const FollowingButton = ({ following_user, setReset }) => {
   } else if (user.user_id == following_user.id) {
     return null;
   } else {
-    return (
-      <button
-        onClick={followingButton}
-        className={`${
-          following ? "bg-blue-600" : " bg-gray-600"
-        } px-5 py-1 text-white rounded-xl`}
-      >
-        {following ? "دنبال شده" : "دنبال کنید +"}
-      </button>
-    );
+    if (!span) {
+      return (
+        <button
+          onClick={followingButton}
+          className={`${
+            following ? "bg-blue-600" : " bg-gray-600"
+          } px-5 py-1 text-white rounded-xl`}
+        >
+          {following ? "دنبال شده" : "دنبال کنید +"}
+        </button>
+      );
+    } else {
+      return (
+        <span
+          onClick={followingButton}
+          className={`${
+            following ? "bg-blue-500 text-white" : "text-blue-400"
+          } cursor-pointer rounded-md px-3 py-1 self-center text-xs border border-blue-300`}
+        >
+          {following ? "دنبال شده" : "دنبال کردن +"}
+        </span>
+      );
+    }
   }
 };
 
