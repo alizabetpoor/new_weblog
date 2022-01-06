@@ -209,14 +209,15 @@ const PersonalinfoPage = () => {
                         placeholder="نام مستعار"
                       />
                     </div>
-                    <div className="col-span-6 sm:col-span-3 relative">
+                    <div className="col-span-6 sm:col-span-3 relative flex flex-col justify-between">
                       <label
                         htmlFor="birthday"
                         className="block text-sm font-medium text-gray-700"
                       >
-                        تاریخ تولد
+                        تاریخ تولد:
                       </label>
                       <DatePicker
+                        inputClassName="w-full"
                         value={datefield.value}
                         onChange={(value) =>
                           formik.setFieldValue("birthday", value)
