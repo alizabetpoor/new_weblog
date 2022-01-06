@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import profilepic from "../../assets/images/profile.webp";
-import { BiBookmark, BiHeart } from "react-icons/bi";
+import { BiHeart } from "react-icons/bi";
 import AuthContext from "../../context/AuthContext";
 import { useToasts } from "react-toast-notifications";
 import useAxios from "../../utils/UseAxios";
+import BookmarkButton from "../BookmarkButton";
 const Post = (props) => {
   const { addToast } = useToasts();
   const { user } = useContext(AuthContext);
@@ -114,7 +115,7 @@ const Post = (props) => {
           <span className="text-sm">{countLike}</span>
         </div>
         <div>
-          <BiBookmark className="cursor-pointer" />
+          <BookmarkButton post_id={post.id} />
         </div>
       </div>
     </div>

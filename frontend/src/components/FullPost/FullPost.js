@@ -6,6 +6,7 @@ import Comment from "../Comment/Comment";
 import { useToasts } from "react-toast-notifications";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
+import BookmarkButton from "../BookmarkButton";
 import Reply from "../Comment/Reply";
 import useAxios from "../../utils/UseAxios";
 import AuthContext from "../../context/AuthContext";
@@ -93,7 +94,7 @@ const FullPost = (props) => {
                   {relatedpost.author.username}
                 </span>
               </Link>
-              <BiBookmark className="text-2xl text-gray-500 cursor-pointer" />
+              <BookmarkButton post_id={relatedpost.id} className="text-2xl" />
             </div>
           </div>
         </div>
@@ -187,7 +188,7 @@ const FullPost = (props) => {
           </div>
           <div className="flex sm:flex-row space-y-3 sm:space-y-0 flex-col justify-between self-stretch items-center">
             <div className="flex items-center text-2xl space-x-3 space-x-reverse text-gray-500">
-              <BiBookmark className="cursor-pointer" />
+              <BookmarkButton post_id={post.id} />
               <div className="flex items-center space-x-2 space-x-reverse">
                 <BiHeart
                   onClick={likeHandler}
@@ -204,7 +205,7 @@ const FullPost = (props) => {
                   }}
                   className="cursor-pointer"
                 />
-                <span className="text-xs">3 نظر</span>
+                <span className="text-xs">{comments?.length} نظر</span>
               </div>
             </div>
             <div>
@@ -232,9 +233,7 @@ const FullPost = (props) => {
                 >
                   {post.author.username}
                 </Link>
-                <span className="cursor-pointer rounded-md px-3 py-1 self-center text-xs border border-blue-300 text-blue-400">
-                  دنبال کردن
-                </span>
+                <FollowingButton following_user={post.author} span={true} />
               </div>
               <div></div>
             </div>
