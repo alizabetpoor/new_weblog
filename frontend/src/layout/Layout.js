@@ -1,3 +1,4 @@
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 const Layout = ({ children }) => {
@@ -7,6 +8,7 @@ const Layout = ({ children }) => {
       <div className="content-container w-full bg-main min-h-screen">
         <div className="content mt-12 w-full">{children}</div>
       </div>
+      <Footer />
     </>
   );
 };
