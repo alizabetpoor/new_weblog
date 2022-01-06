@@ -1,4 +1,3 @@
-from typing import List
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.generics import (
     CreateAPIView,
@@ -12,6 +11,7 @@ from rest_framework.generics import (
 )
 from .mixins import MultipleFieldLookupMixin
 from profiles.models import UserFollowing
+from django.db.models import Q
 from posts.models import Post,Category,Comment,Bookmark
 from datetime import datetime
 from django.contrib.auth import get_user_model
@@ -87,6 +87,18 @@ class Popular_Post(ListAPIView):
     def get_queryset(self):
         posts=Post.objects.order_by("-likes")[0:5]
         return posts
+
+
+class Post_Search(ListAPIView):
+    serializer_class=Post_Serializer
+    pagination_class = Post_Pagination
+    def get_queryset(self):
+        word=self.kwargs.get("word")
+        posts=Post.objects.filter(Q(title__icontains=word) | Q(author__username__iexact=word)).all()
+        return posts
+
+
+
 
 #post views end
 

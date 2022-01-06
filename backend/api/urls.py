@@ -20,6 +20,7 @@ from .views import (Posts_List,
     Following_Delete,
     Bookmark_List,
     Bookmark_Delete,
+    Post_Search,
 )
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -47,6 +48,7 @@ urlpatterns = [
     path("posts/category/<int:category>/",Post_by_category.as_view()),
     path("posts/user/<str:username>/",User_Post.as_view()),
     path("posts/popularposts/",Popular_Post.as_view()),
+    path("posts/search/<str:word>/",Post_Search.as_view()),
     path("categorys/",Categorys_List.as_view()),
     path("categorys/<int:pk>/",Category_Detail.as_view()),
     path("comments/",Comment_List.as_view()),
