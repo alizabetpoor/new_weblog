@@ -10,6 +10,7 @@ import PostPage from "./pages/PostPage";
 import Profile from "./pages/Profile";
 import NewPostPage from "./pages/NewPostPage";
 import CategoryPage from "./pages/CategoryPage";
+import SearchPage from "./pages/SearchPage";
 import PrivateRoute from "./utils/PrivateRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastProvider } from "react-toast-notifications";
@@ -29,6 +30,7 @@ function App() {
               <Route path="/post/:id" component={PostPage} />
               <Route path="/userinformation" component={PersonalinfoPage} />
               <Route path="/category/:category" component={CategoryPage} />
+              <Route path="/search/:word" component={SearchPage} />
               <Route path="/profile/:username" component={Profile} />
               <PrivateRoute>
                 <Route path="/newpost" component={NewPostPage} />
