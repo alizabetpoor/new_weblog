@@ -17,7 +17,7 @@ const CategoryPage = (props) => {
       });
   }, [props.match.params.category]);
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center pb-12">
       <h1>دسته : {category?.name}</h1>
       <div className="sm:w-3/5 w-11/12">
         <Posts endpoint={`/posts/category/${props.match.params.category}/`} />
