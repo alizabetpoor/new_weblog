@@ -5,8 +5,6 @@ const CategoryPage = (props) => {
   const [category, setCategory] = useState(null);
   const api = useAxios();
   useEffect(() => {
-    console.log("re render");
-
     api
       .get(`/categorys/${props.match.params.category}/`)
       .then((res) => {
