@@ -1,9 +1,8 @@
 import { NavLink } from "react-router-dom";
 import styles from "./Header.module.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import { BiSearch, BiX } from "react-icons/bi";
-import userphoto from "../assets/images/profile.webp";
 import ProfileDropDown from "./DropDown/ProfileDropDown";
 import NotifDropDown from "./DropDown/NotifDrowDown";
 import { useContext, useEffect, useState } from "react";
@@ -14,8 +13,18 @@ const Header = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [searchBox, setSearchBox] = useState(false);
   const [categorys, setCategorys] = useState([]);
+  const history = useHistory();
+  const [searchInput, setSearchInput] = useState("");
   const api = useAxios();
   let { user } = useContext(AuthContext);
+  const searchWord = (e) => {
+    if (e.key === "Enter") {
+      if (searchInput) {
+        history.push(`/search/${searchInput}`);
+        setSearchInput("");
+      }
+    }
+  };
   useEffect(() => {
     if (user) {
       setLoggedIn(true);
@@ -43,7 +52,10 @@ const Header = () => {
             <input
               className="w-full focus:ring-0 focus:outline-none border-0 outline-none placeholder-black lg:pr-0 pr-4"
               type="search"
+              value={searchInput}
+              onKeyUp={(e) => searchWord(e)}
               placeholder="در بین مقالات ، نویسندگان و ... سرچ کنید"
+              onChange={(e) => setSearchInput(e.target.value)}
             />
             <BiX
               onClick={() => setSearchBox(false)}
