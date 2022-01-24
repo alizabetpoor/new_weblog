@@ -182,3 +182,5 @@ pip-selfcheck.json
 
 blog_images/
 backend/config/__pycache__/settings.cpython-39.pyc
+
+nginx
