@@ -184,3 +184,5 @@ blog_images/
 backend/config/__pycache__/settings.cpython-39.pyc
 
 nginx
+
+docker-compose.yaml
