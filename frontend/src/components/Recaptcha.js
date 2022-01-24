@@ -4,7 +4,6 @@ const Recaptcha = ({ setEnabledForm }) => {
   const recaptchaRef = createRef();
 
   const capchaChange = (e) => {
-    console.log(e);
     if (e) {
       setEnabledForm(true);
     } else {

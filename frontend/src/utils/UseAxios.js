@@ -4,12 +4,13 @@ import dayjs from "dayjs";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
-const baseURL_Production = "http://127.0.0.1/api/v1/";
+const baseURL_Production = "http://127.0.0.1/api/v1";
 
-const baseURL = "http://127.0.0.1:8000/api/v1/";
+const baseURL = "http://127.0.0.1:8000/api/v1";
 
 const useAxios = () => {
-  const { authToken, setUser, setAuthToken } = useContext(AuthContext);
+  const { authToken, setUser, setAuthToken, logoutUser } =
+    useContext(AuthContext);
   const axiosInstance = axios.create({
     baseURL,
     headers: { Authorization: `Bearer ${authToken?.access}` },
@@ -24,13 +25,22 @@ const useAxios = () => {
     if (!isExpired) {
       return req;
     }
-    const response = await axios.post(`${baseURL}/auth/jwt/refresh/`, {
-      refresh: authToken.refresh,
-    });
-    localStorage.setItem("authTokens", JSON.stringify(response.data));
-    setAuthToken(response.data);
-    setUser(jwt_decode(response.data.access));
-    req.headers.Authorization = `Bearer ${response.data.access}`;
+    try {
+      const response = await axios.post(`${baseURL}/auth/jwt/refresh/`, {
+        refresh: authToken.refresh,
+      });
+      localStorage.setItem("authTokens", JSON.stringify(response.data));
+      setAuthToken(response.data);
+      setUser(jwt_decode(response.data.access));
+      req.headers.Authorization = `Bearer ${response.data.access}`;
+    } catch (error) {
+      const { response } = error;
+      const { request, ...errorObject } = response; // take everything but 'request'
+      if (errorObject.status === 401) {
+        logoutUser();
+      }
+    }
+
     return req;
   });
 

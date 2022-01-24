@@ -7,6 +7,11 @@ const AuthContext = createContext();
 
 export default AuthContext;
 
+let loginUrlDevelopment = "http://127.0.0.1:8000/api/v1/auth/jwt/create/";
+let loginUrlProduction = "";
+let signUpUrlDevelopment = "http://127.0.0.1:8000/api/v1/auth/users/";
+let signUpUrlProduction = "";
+
 export const AuthProvider = ({ children }) => {
   let token = localStorage.getItem("authTokens");
   const { addToast } = useToasts();
@@ -18,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   const history = useHistory();
   let loginUser = async (username, password) => {
     axios
-      .post("http://127.0.0.1:8000/api/v1/auth/jwt/create/", {
+      .post(loginUrlDevelopment, {
         username: username,
         password: password,
       })
@@ -43,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   };
   let signupUser = (username, email, password) => {
     axios
-      .post("http://127.0.0.1:8000/api/v1/auth/users/", {
+      .post(signUpUrlDevelopment, {
         email: email,
         username: username,
         password: password,
@@ -63,6 +68,7 @@ export const AuthProvider = ({ children }) => {
         }
       });
   };
+
   let logoutUser = () => {
     setAuthToken(null);
     setUser(null);

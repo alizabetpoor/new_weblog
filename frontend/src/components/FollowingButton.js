@@ -11,7 +11,7 @@ const FollowingButton = ({ following_user, span }) => {
   const followingButton = () => {
     if (following) {
       api
-        .delete(`/following/${user.user_id}/${following_user.id}/`)
+        .delete(`/following/${user?.user_id}/${following_user.id}/`)
         .then((res) => {
           if (res.status === 204) {
             addToast(`شما دیگر ${following_user.username} را دنبال نمی کنید.`, {
@@ -45,18 +45,20 @@ const FollowingButton = ({ following_user, span }) => {
     }
   };
   useEffect(() => {
-    api
-      .get(`/following/${user.user_id}/${following_user.id}/`)
-      .then((res) => {
-        if (res.status === 200) {
-          setFollowing(true);
-        }
-      })
-      .catch((err) => {
-        if (err.response.status === 404) {
-          setFollowing(false);
-        }
-      });
+    if (user) {
+      api
+        .get(`/following/${user?.user_id}/${following_user.id}/`)
+        .then((res) => {
+          if (res.status === 200) {
+            setFollowing(true);
+          }
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            setFollowing(false);
+          }
+        });
+    }
   }, []);
   if (!user) {
     return null;
