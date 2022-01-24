@@ -38,3 +38,4 @@ sqlparse==0.4.2
 uritemplate==4.1.1
 urllib3==1.26.7
 gunicorn==20.1.0
+psycopg2>=2.7,<3.0
