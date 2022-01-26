@@ -23,7 +23,7 @@ from datetime import timedelta
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG=config('DEBUG')
+DEBUG=False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -88,24 +88,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 #for development
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('db_NAME'),
+        'USER': config('db_USER'),
+        'PASSWORD':config('db_PASSWORD'),
+        'HOST': 'db',
+        'PORT': 5432,
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config('db_NAME'),
-            'USER': config('db_USER'),
-            'PASSWORD':config('db_PASSWORD'),
-            'HOST': 'db',
-            'PORT': 5432,
-        }
-    }
+}
 
 
 
@@ -153,8 +151,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-if not DEBUG:
-    STATIC_URL = '/staticfiles/'
+
+STATIC_URL = '/staticfiles/'
 
 STATIC_ROOT = BASE_DIR / "static"
 
