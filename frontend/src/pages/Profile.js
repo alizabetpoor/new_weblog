@@ -19,7 +19,14 @@ const Profile = (props) => {
   }, []);
   if (!userProfile)
     return (
-      <ReactLoading type="cubes" color="#236df7" height={"20%"} width={"20%"} />
+      <div className="flex justify-center">
+        <ReactLoading
+          type="cubes"
+          color="#236df7"
+          height={"20%"}
+          width={"20%"}
+        />
+      </div>
     );
   if (userProfile === 404)
     return <div>پروفایلی با این یوزر نیم وجود ندارد</div>;
@@ -45,25 +52,19 @@ const Profile = (props) => {
           </div>
         </div>
         <div className="flex md:justify-start justify-center space-x-7 space-x-reverse text-gray-600 text-base border-b-4 pb-14 border-gray-500 border-dotted">
-          <Link
-            to="/profile/alizabetpoor/following"
-            className="hover:text-black"
-          >
+          <span className="hover:text-black">
             توسط{" "}
             <span className="text-black font-sahelbold font-extrabold underline">
               {userProfile.profile.followers.length}
             </span>{" "}
             نفر دنبال می شود
-          </Link>
-          <Link
-            to="/profile/alizabetpoor/follower"
-            className="hover:text-black"
-          >
+          </span>
+          <span className="hover:text-black">
             <span className="text-black font-sahelbold font-extrabold underline">
               {userProfile.profile.following.length}
             </span>{" "}
             را دنبال می کند
-          </Link>
+          </span>
         </div>
         <Posts endpoint={`/posts/user/${userProfile.username}/`} />
       </div>
