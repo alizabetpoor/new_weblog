@@ -23,9 +23,9 @@ from datetime import timedelta
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG=config('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -87,12 +87,28 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+#for development
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('db_NAME'),
+            'USER': config('db_USER'),
+            'PASSWORD':config('db_PASSWORD'),
+            'HOST': 'db',
+            'PORT': 5432,
+        }
+    }
+
+
+
 
 
 # Password validation
@@ -114,8 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = '/media/'
-
+MEDIA_URL = '/media_django/'
 
 
 #change user model
@@ -138,7 +153,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+if not DEBUG:
+    STATIC_URL = '/staticfiles/'
+
+STATIC_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -200,8 +218,53 @@ SIMPLE_JWT = {
 
 
 #cors setting 
-CORS_ALLOWED_ORIGINS = [
+# CORS_ALLOWED_ORIGINS = [
 
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-]
+#     'http://127.0.0.1:3000',
+#     'http://localhost:3000',
+# ]
+CORS_ALLOW_ALL_ORIGINS=True
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': '[DJANGO] %(levelname)s %(asctime)s %(module)s '
+                        '%(name)s.%(funcName)s:%(lineno)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        }
+    },
+    'loggers': {
+        '*': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
+    },
+}
+
+#for development
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+EMAIL_HOST = config('EMAIL_HOST')
+
+# Port for sending e-mail.
+EMAIL_PORT = config('EMAIL_PORT')
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = False
