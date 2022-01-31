@@ -4,9 +4,14 @@ import dayjs from "dayjs";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
-const baseURL_Production = "http://alizabetpour.ir/api/v1";
+let baseURL = "";
 
-const baseURL = "http://127.0.0.1:8000/api/v1";
+console.log();
+if (process.env.NODE_ENV === "development") {
+  baseURL = "http://127.0.0.1:8000/api/v1";
+} else if (process.env.NODE_ENV === "production") {
+  baseURL = "http://alizabetpour.ir/api/v1";
+}
 
 const useAxios = () => {
   const { authToken, setUser, setAuthToken, logoutUser } =
