@@ -7,10 +7,16 @@ const AuthContext = createContext();
 
 export default AuthContext;
 
-let loginUrlDevelopment = "http://127.0.0.1:8000/api/v1/auth/jwt/create/";
-let loginUrlProduction = "";
-let signUpUrlDevelopment = "http://127.0.0.1:8000/api/v1/auth/users/";
-let signUpUrlProduction = "";
+let loginUrl = "";
+let signUpUrl = "";
+
+if (process.env.NODE_ENV === "development") {
+  loginUrl = "http://127.0.0.1:8000/api/v1/auth/jwt/create/";
+  signUpUrl = "http://127.0.0.1:8000/api/v1/auth/users/";
+} else if (process.env.NODE_ENV === "production") {
+  loginUrl = "http://alizabetpour.ir/api/v1/auth/jwt/create/";
+  signUpUrl = "http://alizabetpour.ir/api/v1/auth/users/";
+}
 
 export const AuthProvider = ({ children }) => {
   let token = localStorage.getItem("authTokens");
@@ -23,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   const history = useHistory();
   let loginUser = async (username, password) => {
     axios
-      .post(loginUrlDevelopment, {
+      .post(loginUrl, {
         username: username,
         password: password,
       })
@@ -48,7 +54,7 @@ export const AuthProvider = ({ children }) => {
   };
   let signupUser = (username, email, password) => {
     axios
-      .post(signUpUrlDevelopment, {
+      .post(signUpUrl, {
         email: email,
         username: username,
         password: password,
