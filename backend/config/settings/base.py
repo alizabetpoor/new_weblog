@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 from datetime import timedelta
 # Quick-start development settings - unsuitable for production
@@ -215,27 +215,32 @@ CORS_ALLOW_ALL_ORIGINS=True
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'default': {
-            'format': '[DJANGO] %(levelname)s %(asctime)s %(module)s '
-                        '%(name)s.%(funcName)s:%(lineno)s: %(message)s'
+    "version": 1,
+    "disable_existing_loggers": False,
+    "root": {"level": "INFO", "handlers": ["file"]},
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": "/var/log/django.log",
+            "formatter": "app",
         },
     },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
-        }
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True
+        },
     },
-    'loggers': {
-        '*': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        }
+    "formatters": {
+        "app": {
+            "format": (
+                u"%(asctime)s [%(levelname)-8s] "
+                "(%(module)s.%(funcName)s) %(message)s"
+            ),
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
     },
 }
 
