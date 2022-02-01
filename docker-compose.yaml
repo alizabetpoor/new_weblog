@@ -2,14 +2,15 @@ version: "3"
 
 services:
   db:
-    image: postgres:11-alpine
+    image: postgres
     restart: always
     environment:
+      PGDATA: /var/postgres_data
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - pgdata:/var/lib/posgresql/data
+      - postgres_data:/var/postgres_data
   backend:
     build:
       context: ./backend
@@ -40,4 +41,5 @@ services:
 volumes:
   django_build:
   react_build:
-  pgdata:
+  postgres_data:
+    external: true
