@@ -42,4 +42,3 @@ volumes:
   django_build:
   react_build:
   postgres_data:
-    external: true
