@@ -31,6 +31,8 @@ const convertDate = (date) => {
       year: parseInt(dateList[0]),
     };
     return dateObject;
+  } else if (date === null) {
+    return null;
   } else {
     let dateString = `${date.year}-${date.month}-${date.day}`;
     return dateString;
@@ -149,7 +151,7 @@ const PersonalinfoPage = () => {
         setFormValues(formvalues);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error dare:", err);
       });
   }, []);
   return (
