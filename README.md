@@ -10,3 +10,8 @@ cd new_weblog
 docker-compose build
 docker-compose up -d
 ```
+## screenshots
+![home page](/screenshots/home1.png)
+![home page](/screenshots/home2.png)
+![personalinfo page](/screenshots/personalinfo.png)
+![newpost page](/screenshots/newpost.png)
