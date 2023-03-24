@@ -17,6 +17,7 @@ services:
     command: gunicorn config.wsgi --bind 0.0.0.0:8000
     ports:
       - "8000:8000"
+
     depends_on:
       - db
     volumes:
@@ -30,7 +31,8 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - 80:8080
+      - 8082:8080
+
     volumes:
       - ./nginx/nginx-setup.conf:/etc/nginx/conf.d/default.conf:ro
       - react_build:/var/www/react
@@ -45,3 +47,4 @@ volumes:
   react_build:
   postgres_data:
   django_media:
+

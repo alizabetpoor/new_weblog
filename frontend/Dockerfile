@@ -1,5 +1,6 @@
-FROM node:15.13-alpine
+FROM node:14-alpine
 WORKDIR /frontend
 COPY . .
-RUN npm install
-RUN npm run build
+RUN npm install yarn
+RUN yarn install
+RUN yarn run build

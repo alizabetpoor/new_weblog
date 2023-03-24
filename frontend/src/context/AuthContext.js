@@ -11,11 +11,11 @@ let loginUrl = "";
 let signUpUrl = "";
 
 if (process.env.NODE_ENV === "development") {
-  loginUrl = "http://127.0.0.1:8000/api/v1/auth/jwt/create/";
-  signUpUrl = "http://127.0.0.1:8000/api/v1/auth/users/";
+  loginUrl = "http://weblog.127.0.0.1:8000/api/v1/auth/jwt/create/";
+  signUpUrl = "http://weblog.127.0.0.1:8000/api/v1/auth/users/";
 } else if (process.env.NODE_ENV === "production") {
-  loginUrl = "http://alizabetpour.ir/api/v1/auth/jwt/create/";
-  signUpUrl = "http://alizabetpour.ir/api/v1/auth/users/";
+  loginUrl = "http://weblog.alizabetpour.ir/api/v1/auth/jwt/create/";
+  signUpUrl = "http://weblog.alizabetpour.ir/api/v1/auth/users/";
 }
 
 export const AuthProvider = ({ children }) => {
