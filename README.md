@@ -1,6 +1,6 @@
 # new_weblog
 a weblog that is build with react js and django rest framework <br />
-demo address:[alizabetpour.ir](http://weblog.alizabetpour.ir "وبلاگ")
+demo address:[weblog.alizabetpour.ir](http://weblog.alizabetpour.ir "وبلاگ")
 # How to use?
 change .env-sample files to .env and set your variable
 ## run the site
